@@ -25,7 +25,6 @@ def login_with_credential(cred_type, request):
     response = requests.post(BASE_URL + "auth/login", json=payload, headers=HEADERS)
     login_response["response"] = response
 
-    # ✅ Attach data to HTML report
     for title, content in {
         "API Request Payload": payload,
         "API Response Body": response.text,

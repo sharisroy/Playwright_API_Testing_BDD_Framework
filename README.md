@@ -76,7 +76,10 @@ This project is an **API testing automation framework** that uses **Playwright**
 4. **Run tests:**
    Once everything is set up, you can run your tests with Pytest:
    ```bash
-   pytest --bdd --maxfail=1 --disable-warnings
+   1. pytest
+   2. pytest -n 4
+   3. pytest -m smoke -v
+   
    ```
 
 ## How It Works

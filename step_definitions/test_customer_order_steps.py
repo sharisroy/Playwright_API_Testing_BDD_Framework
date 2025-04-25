@@ -22,12 +22,6 @@ def get_order_details(auth_token, request):
     order_response.append({
         "response": response
     })
-    # 📝 Attach custom section in HTML report
-    # for title, content in {
-    #     "API Response Body": response.text,
-    #     "Status Code": response.status_code
-    # }.items():
-    #     request.node._report_sections.append(("call", title, str(content)))
 
 
 @then("the order details should be successfully retrieved")
