@@ -1,0 +1,6 @@
+{
+  "base_url": "https://rahulshettyacademy.com/api/ecom/",
+  "headers": {
+    "Content-Type": "application/json"
+  }
+}

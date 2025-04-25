@@ -1,0 +1,38 @@
+# Ignore HTML reports and test output
+*.html
+*.htm
+*.xml
+
+# Ignore Playwright and pytest reports
+playwright-report/
+test-results/
+report.html
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.env/
+venv/
+ENV/
+env/
+
+# VS Code settings
+.vscode/
+
+# Playwright specific
+playwright-report/
+test-results/
+
+# Pytest cache
+.pytest_cache/
+.cache/
+htmlcov/
+
+# Logs
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
