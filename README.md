@@ -27,7 +27,7 @@ This project is an **API testing automation framework** that uses **Playwright**
 ## Project Structure
 
 ```
-.
+
 ├── features/                       
 │   ├── login.feature                 # Gherkin feature file for login functionality tests
 │   ├── order.feature                 # Gherkin feature file for order creation tests
@@ -71,7 +71,7 @@ This project is an **API testing automation framework** that uses **Playwright**
    ```
 
 3. **Configure your API base URL and credentials**  
-   Update the `config.json` or `data_loader.py` file to include your API base URL, login credentials, and any other necessary configurations.
+   Update the `config.json`, `credentials.json` and `test_data.json` file to include your API base URL, login credentials, and test data.
 
 4. **Run tests:**
    Once everything is set up, you can run your tests with Pytest:
