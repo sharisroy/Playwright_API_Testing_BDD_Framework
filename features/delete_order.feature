@@ -1,4 +1,5 @@
 Feature: Order Deletion API Testing
+  @smoke
   Scenario: Delete an order with a valid order ID
     Given I am authenticated with a valid user account
     When I request to delete my order

@@ -1,10 +1,15 @@
 Feature: User Login API Testing
 
+  @smoke
+  @regression
+  @sanity
   Scenario: Successful login with valid credentials
     Given the API base url is loaded
     When I login using "valid_user" credentials
     Then the login should be successful
-
+  @smoke
+  @regression
+  @sanity
   Scenario: Login with invalid password
     Given the API base url is loaded
     When I login using "invalid_password" credentials
