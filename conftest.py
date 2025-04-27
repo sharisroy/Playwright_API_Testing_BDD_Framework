@@ -54,27 +54,10 @@ def latest_order_id(auth_token):
     return latest_order_id
 
 
-
-# def test_latest_order_id(auth_token):
-#     config = get_config()
-#     headers = {'Authorization': auth_token}
-#     order_response = requests.get(config["base_url"] + "order/get-orders-for-customer/67d8f80dc019fb1ad62b991d", headers=headers)
-#     # order_response = api_context.get("order/get-orders-for-customer/67d8f80dc019fb1ad62b991d", headers=headers)
-#     assert order_response.json()['message'] == "Orders fetched for customer Successfully"
-#     latest_order_id = order_response.json()['data'][0]['_id']
-#     print(order_response.json())
-#     print(f"Latest Order ID: {latest_order_id}")
-#     return latest_order_id
-
-
-
-
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     outcome = yield
     rep = outcome.get_result()
-
-    # Only add extras during actual test function call
     if rep.when == "call":
         response_text = getattr(item, "api_response_text", None)
         request_payload = getattr(item, "api_request_payload", None)
