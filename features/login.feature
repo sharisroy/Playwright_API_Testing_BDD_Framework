@@ -14,7 +14,7 @@ Feature: User Login API Testing
     Given the API base url is loaded
     When I login using "invalid_password" credentials
     Then the login should fail
-
+  @regression
   Scenario: Login with wrong password
     Given the API base url is loaded
     When I login using "wrong_password" credentials
