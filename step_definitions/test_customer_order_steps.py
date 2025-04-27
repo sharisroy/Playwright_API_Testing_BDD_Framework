@@ -2,7 +2,7 @@ import requests
 from pytest_bdd import scenarios, given, when, then, parsers
 from utils.data_loader import get_config, get_order_data
 
-scenarios('../features/customer_order.feature')  # Link to the feature file
+scenarios('../features/customer_order.feature')
 
 order_response = []
 

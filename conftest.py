@@ -2,15 +2,14 @@ import json
 
 import pytest
 import requests
-from playwright.sync_api import APIRequestContext
+from playwright.sync_api import APIRequestContext, Playwright
 from pytest_html import extras
 
-from utils.data_loader import get_config, get_credentials, get_order_data
+from utils.data_loader import get_config, get_credentials
 
 @pytest.fixture(scope="session")
-def api_context(playwright):
+def api_context(playwright: Playwright):
     context = playwright.request.new_context(
-        base_url="https://your-api-base-url.com",
         extra_http_headers={
             "Content-Type": "application/json"
         }
@@ -55,7 +54,7 @@ def latest_order_id(auth_token):
 
 
 @pytest.hookimpl(hookwrapper=True)
-def pytest_runtest_makereport(item, call):
+def pytest_runtest_makereport(item):
     outcome = yield
     rep = outcome.get_result()
     if rep.when == "call":

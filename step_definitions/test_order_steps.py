@@ -2,7 +2,7 @@ import requests
 from pytest_bdd import scenarios, given, when, then, parsers
 from utils.data_loader import get_config, get_order_data
 
-scenarios('../features/order.feature')  # Link to the feature file
+scenarios('../features/order.feature')
 
 order_response = []
 
@@ -12,31 +12,24 @@ def i_am_logged_in(auth_token):
 
 @when(parsers.parse('I try to place an order using "{order_type}" data'))
 def place_order(order_type, auth_token, request):
-    # Load the config and order data
     config = get_config()
-    order_data = get_order_data()['order_list']  # Get the order data from JSON
-
-    # Set headers for the API request
+    order_data = get_order_data()['order_list']
     headers = {'Authorization': auth_token}
 
-    # Get the order data for the given order_type
-    order = order_data.get(order_type)  # This retrieves the order based on the type passed
+    order = order_data.get(order_type)
     if not order:
-        raise ValueError(f"Invalid order type: {order_type}")  # Error if order type is invalid
+        raise ValueError(f"Invalid order type: {order_type}")
 
     payload = {
-        "orders": [order]  # Wrap the order in a list as required by the API
+        "orders": [order]
     }
 
-    # Make the POST request to create the order
     response = requests.post(
-        config["base_url"] + "order/create-order",  # Add the base URL and endpoint
+        config["base_url"] + "order/create-order",
         json=payload,
         headers=headers
     )
 
-
-    # Store the response for further validation
     res_json = response.json()
     order_id = res_json.get("orders", [None])[0]
     order_response.append({
@@ -45,7 +38,7 @@ def place_order(order_type, auth_token, request):
         "order_id": order_id
     })
 
-    # 📝 Attach custom section in HTML report
+    # Attach custom section in HTML report
     for title, content in {
         "API Request Payload": payload,
         "API Response Body": response.text,
