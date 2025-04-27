@@ -1,12 +1,26 @@
+import json
+
 import pytest
 import requests
+from playwright.sync_api import APIRequestContext
 from pytest_html import extras
 
 from utils.data_loader import get_config, get_credentials, get_order_data
 
+@pytest.fixture(scope="session")
+def api_context(playwright):
+    context = playwright.request.new_context(
+        base_url="https://your-api-base-url.com",
+        extra_http_headers={
+            "Content-Type": "application/json"
+        }
+    )
+    yield context
+    context.dispose()
+
 
 @pytest.fixture(scope="session")
-def auth_token():
+def auth_token(api_context: APIRequestContext):
     config = get_config()
     credentials = get_credentials()["user_credentials"]["valid_user"]
 
@@ -17,11 +31,16 @@ def auth_token():
     }
     headers = config["headers"]
 
-    response = requests.post(login_url, json=payload, headers=headers)
-    assert response.status_code == 200, f"Login failed: {response.status_code} - {response.text}"
+    response = api_context.post(
+        login_url,
+        data=json.dumps(payload),
+        headers=headers
+    )
+    assert response.ok, f"Login failed: {response.status} - {response.text()}"
 
     token = response.json().get("token")
     assert token, "Token not found in login response"
+
     return token
 
 @pytest.fixture(scope="module")
@@ -46,8 +65,8 @@ def latest_order_id(auth_token):
 #     print(order_response.json())
 #     print(f"Latest Order ID: {latest_order_id}")
 #     return latest_order_id
-#
-#
+
+
 
 
 @pytest.hookimpl(hookwrapper=True)

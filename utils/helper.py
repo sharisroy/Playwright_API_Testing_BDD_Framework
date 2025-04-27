@@ -1,6 +1,7 @@
 import requests
+from utils.data_loader import get_config
+
 def login_and_get_token(user_email, user_password):
-    from utils.data_loader import get_config
     config = get_config()
     base_url = config['base_url']
     headers = config['headers']
@@ -12,7 +13,7 @@ def login_and_get_token(user_email, user_password):
     }
 
     response = requests.post(url, json=payload, headers=headers)
-    print("Login Response:", response.status_code, response.text)  # Add debug print
+    print("Login Response:", response.status_code, response.text)
 
     if response.status_code == 200:
         return response.json().get("token")
