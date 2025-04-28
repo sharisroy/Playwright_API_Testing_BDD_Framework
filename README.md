@@ -80,7 +80,16 @@ This project is an **API testing automation framework** that uses **Playwright**
    2. pytest -n 4
    3. pytest -m smoke -v
    
-   ```
+
+   Debug Mode! 🎯
+   - pdb.set_trace() --> It freezes the execution there
+   You can type:
+   p payload ➔ See your login data
+   n ➔ Go to the next line
+   p response ➔ Check if response is OK
+   c ➔ Continue running the rest of the test
+     ``` 
+ 
 
 ## How It Works
 

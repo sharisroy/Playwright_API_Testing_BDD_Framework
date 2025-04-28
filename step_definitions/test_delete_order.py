@@ -2,10 +2,12 @@ from pytest_bdd import scenarios, given, when, then
 import requests
 
 from utils.data_loader import get_config
+from utils.helper import get_logger
 
 scenarios('../features/delete_order.feature')
 
 delete_response = {}
+logger = get_logger()
 
 
 @given("I am authenticated with a valid user account")
@@ -15,6 +17,7 @@ def authenticated(auth_token):
 
 @when("I request to delete my order")
 def delete_my_order(auth_token, latest_order_id, request):
+    logger.info("Starting delete test")
     config = get_config()
     headers = {'Authorization': auth_token}
 
@@ -22,17 +25,10 @@ def delete_my_order(auth_token, latest_order_id, request):
     response = requests.delete(delete_url, headers=headers)
 
     delete_response["response"] = response
-    print(delete_response)
-
-    for title, content in {
-        "Delete URL": delete_url,
-        "Status Code": response.status_code,
-        "Response Body": response.text
-    }.items():
-        request.node._report_sections.append(("call", title, str(content)))
 
 
 @then("the order should be successfully deleted")
 def verify_delete_success():
     res = delete_response["response"]
     assert res.status_code == 200, f"Expected 200, got {res.status_code}: {res.text}"
+    logger.info("Message: {}".format(res.json()["message"]))

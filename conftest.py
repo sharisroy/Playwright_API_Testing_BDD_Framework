@@ -1,4 +1,6 @@
 import json
+import logging
+import pdb
 
 import pytest
 import requests
@@ -36,7 +38,7 @@ def auth_token(api_context: APIRequestContext):
         headers=headers
     )
     assert response.ok, f"Login failed: {response.status} - {response.text()}"
-
+    # pdb.set_trace()
     token = response.json().get("token")
     assert token, "Token not found in login response"
 
@@ -86,3 +88,4 @@ def pytest_metadata(metadata):
     metadata["Project Name"] = "API Testing"
     metadata["Tester"] = "Haris"
     metadata["Environment"] = "Staging"
+
