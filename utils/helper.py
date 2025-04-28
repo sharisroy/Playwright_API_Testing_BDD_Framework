@@ -24,18 +24,17 @@ def login_and_get_token(user_email, user_password):
 
 def get_logger(name=__name__):
     logger = logging.getLogger(name)
-    logger.setLevel(logging.DEBUG)  # you control what level of logs you want
+    logger.setLevel(logging.DEBUG)
 
     # Create console handler
     ch = logging.StreamHandler()
     ch.setLevel(logging.DEBUG)
 
-    # Create format
+
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     ch.setFormatter(formatter)
 
-    # Add handler to logger
-    if not logger.handlers:  # Prevent adding multiple handlers
+    if not logger.handlers:
         logger.addHandler(ch)
 
     return logger

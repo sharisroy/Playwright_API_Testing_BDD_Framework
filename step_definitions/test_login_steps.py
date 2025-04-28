@@ -37,7 +37,7 @@ def check_login_success():
     res = login_response["response"]
     assert res.status_code == 200
     assert "token" in res.json()
-    logger.info("Login successful ✅")
+    logger.info("Login successful")
     logger.info("Token: {}".format(res.json()["token"]))
     logger.info("Message: {}".format(res.json()["message"]))
 
