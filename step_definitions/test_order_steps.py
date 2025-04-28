@@ -52,7 +52,7 @@ def verify_create_order_success():
     res = latest["response"]
     assert res.status_code == 201, f"Expected 201 but got {res.status_code}: {res.text}"
     logger.info("Message: {}".format(res.json()["message"]))
-    # print(res.text)
+
 
 @then("the order creation should fail")
 def verify_order_creation_failure():
