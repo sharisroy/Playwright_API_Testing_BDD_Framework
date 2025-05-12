@@ -7,16 +7,19 @@ from utils.helper import get_logger
 
 scenarios('../features/login.feature')
 
-config = get_config()
-credentials = get_credentials()["user_credentials"]
-BASE_URL = config['base_url']
-HEADERS = config['headers']
-
-login_response = {}
 logger = get_logger()
 
+credentials = get_credentials()["user_credentials"]
+BASE_URL = None
+HEADERS = None
+login_response = {}
+
+
 @given("the API base url is loaded")
-def api_base_url_loaded():
+def api_base_url_loaded(config):
+    global BASE_URL
+    BASE_URL = config['base_url']
+    logger.info(f"Base URL: {BASE_URL}")
     return BASE_URL
 
 @when(parsers.parse('I login using "{cred_type}" credentials'))
@@ -27,7 +30,6 @@ def login_with_credential(cred_type, request):
         "userEmail": cred["userEmail"],
         "userPassword": cred["userPassword"]
     }
-    logger.info(f"Headers: {HEADERS}")
     logger.info(f"Payload: {payload}")
     response = requests.post(BASE_URL + "auth/login", json=payload, headers=HEADERS)
     login_response["response"] = response

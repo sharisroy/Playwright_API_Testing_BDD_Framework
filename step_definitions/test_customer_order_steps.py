@@ -13,19 +13,18 @@ def i_am_logged_in(user_obj):
     assert user_obj is not None     # Verify that the token is present
 
 @when(parsers.parse('I request the details of my order'))
-def get_order_details(user_obj, request):
+def get_order_details(user_obj, config):
     logger.info("Starting get order details test")
-    config = get_config()
-    headers = get_auth_headers(user_obj["token"])
 
-    response = requests.get(
-        config["base_url"] + "order/get-orders-for-customer/67d8f80dc019fb1ad62b991d",
-        headers=headers
-    )
+    headers = get_auth_headers(user_obj["token"])
+    url = config["base_url"] + "order/get-orders-for-customer/67d8f80dc019fb1ad62b991d"
+
+    logger.info(f"GET {url}")
+    response = requests.get(url, headers=headers)
+
     order_response.append({
         "response": response
     })
-
 
 @then("the order details should be successfully retrieved")
 def verify_order_success():

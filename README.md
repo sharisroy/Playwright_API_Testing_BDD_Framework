@@ -79,6 +79,8 @@ This project is an **API testing automation framework** that uses **Playwright**
    1. pytest
    2. pytest -n 4
    3. pytest -m smoke -v
+   4. pytest --env=stage
+
    
 
    Debug Mode! 🎯

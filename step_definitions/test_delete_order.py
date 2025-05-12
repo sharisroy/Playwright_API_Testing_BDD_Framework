@@ -1,7 +1,5 @@
 from pytest_bdd import scenarios, given, when, then
 import requests
-
-from utils.data_loader import get_config
 from utils.helper import get_logger, get_auth_headers
 
 scenarios('../features/delete_order.feature')
@@ -14,14 +12,11 @@ logger = get_logger()
 def authenticated(user_obj):
     assert user_obj is not None
 
-
 @when("I request to delete my order")
-def delete_my_order(user_obj, latest_order_id, request):
+def delete_my_order(user_obj, latest_order_id, config):
     logger.info("Starting delete test")
-    config = get_config()
 
     headers = get_auth_headers(user_obj["token"])
-
     delete_url = f"{config['base_url']}order/delete-order/{latest_order_id}"
     response = requests.delete(delete_url, headers=headers)
 

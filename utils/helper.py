@@ -1,13 +1,10 @@
 import logging
-
 import requests
-from utils.data_loader import get_config
 
-def login_and_get_token(user_email, user_password):
-    config = get_config()
+def login_and_get_token(user_email, user_password, config):
     base_url = config['base_url']
     headers = config['headers']
-    url = base_url + "auth/login"
+    url = base_url + config["login_endpoint"]
 
     payload = {
         "userEmail": user_email,

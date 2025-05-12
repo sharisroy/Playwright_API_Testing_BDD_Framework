@@ -9,6 +9,37 @@ from playwright.sync_api import APIRequestContext, Playwright
 
 from utils.data_loader import get_config, get_credentials
 
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--env",
+        action="store",
+        default="dev",  # Default to dev if no env is passed
+        help="Environment to run tests against: dev, qa, stage, prod"
+    )
+
+
+@pytest.fixture(scope="session")
+def config(request):
+    env = request.config.getoption("--env")
+    with open("data/config.json") as f:
+        full_config = json.load(f)
+
+    if env not in full_config["environments"]:
+        raise ValueError(f"Invalid environment: {env}")
+
+    env_config = full_config["environments"][env]
+    shared_config = full_config["shared"]
+
+    # Merge shared and environment-specific settings
+    merged_config = {
+        "env": env,
+        "base_url": env_config["base_url"],
+        **shared_config
+    }
+    return merged_config
+
+
 @pytest.fixture(scope="session")
 def api_context(playwright: Playwright):
     context = playwright.request.new_context(
@@ -21,8 +52,7 @@ def api_context(playwright: Playwright):
 
 
 @pytest.fixture(scope="session")
-def user_obj(api_context: APIRequestContext):
-    config = get_config()
+def user_obj(api_context: APIRequestContext, config):
     credentials = get_credentials()["user_credentials"]["valid_user"]
 
     login_url = config["base_url"] + "auth/login"
@@ -42,20 +72,18 @@ def user_obj(api_context: APIRequestContext):
     token = response.json().get("token")
     assert token, "Token not found in login response"
 
-    # return token
-
-    response_obj = response.json()
-    return response_obj
+    return response.json()
 
 @pytest.fixture(scope="module")
-def latest_order_id(user_obj):
-    config = get_config()
+def latest_order_id(user_obj, config):
     headers = {'Authorization': user_obj["token"]}
-    order_response = requests.get(config["base_url"] + "order/get-orders-for-customer/" + user_obj["userId"],
-                                  headers=headers)
+    url = f"{config['base_url']}order/get-orders-for-customer/{user_obj['userId']}"
+    order_response = requests.get(url, headers=headers)
+
+    assert order_response.ok, f"Failed to get order: {order_response.status_code}"
     assert order_response.json()['message'] == "Orders fetched for customer Successfully"
-    latest_order_id = order_response.json()['data'][0]['_id']
-    return latest_order_id
+
+    return order_response.json()['data'][0]['_id']
 
 @pytest.hookimpl(tryfirst=True)
 def pytest_html_report_title(report):

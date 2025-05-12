@@ -8,8 +8,6 @@ scenarios('../features/order.feature')
 
 logger = get_logger()
 
-
-# 🔧 Fixture to hold per-scenario order context
 @pytest.fixture
 def order_context():
     return {}
@@ -21,10 +19,10 @@ def i_am_logged_in(user_obj):
 
 
 @when(parsers.parse('I try to place an order using "{order_type}" data'))
-def place_order(order_type, user_obj, order_context):
+def place_order(order_type, user_obj, order_context, config):
     logger.info("Starting create order test")
 
-    config = get_config()
+    # config = get_config()
     order_data = get_order_data()['order_list']
     headers = get_auth_headers(user_obj["token"])
 
@@ -47,7 +45,6 @@ def place_order(order_type, user_obj, order_context):
     res_json = response.json()
     order_id = res_json.get("orders", [None])[0]
 
-    # 💾 Store everything in context for use in later steps
     order_context["order_type"] = order_type
     order_context["response"] = response
     order_context["order_id"] = order_id

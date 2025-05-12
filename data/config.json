@@ -1,6 +1,27 @@
 {
-  "base_url": "https://rahulshettyacademy.com/api/ecom/",
-  "headers": {
-    "Content-Type": "application/json"
+  "env": "dev",
+  "shared": {
+    "login_endpoint": "/auth/login",
+    "order_endpoint": "/orders/create",
+    "headers": {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    "timeout": 30,
+    "retries": 3
+  },
+  "environments": {
+    "dev": {
+      "base_url": "https://rahulshettyacademy.com/api/ecom/"
+    },
+    "stage": {
+      "base_url": "https://rahulshettyacademy.com/api/ecom/"
+    },
+    "qa": {
+      "base_url": "https://rahulshettyacademy.com/api/ecom/"
+    },
+    "prod": {
+      "base_url": "https://rahulshettyacademy.com/api/ecom/"
+    }
   }
 }

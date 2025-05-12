@@ -3,6 +3,7 @@ Feature: User Login API Testing
   @smoke
   @regression
   @sanity
+  @login
   Scenario: Successful login with valid credentials
     Given the API base url is loaded
     When I login using "valid_user" credentials
