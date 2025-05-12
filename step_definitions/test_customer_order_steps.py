@@ -1,7 +1,7 @@
 import requests
 from pytest_bdd import scenarios, given, when, then, parsers
 from utils.data_loader import get_config, get_order_data
-from utils.helper import get_logger
+from utils.helper import get_logger, get_auth_headers
 
 scenarios('../features/customer_order.feature')
 
@@ -9,14 +9,14 @@ order_response = []
 logger = get_logger()
 
 @given("I am authenticated with a valid user account")
-def i_am_logged_in(auth_token):
-    assert auth_token is not None     # Verify that the token is present
+def i_am_logged_in(user_obj):
+    assert user_obj is not None     # Verify that the token is present
 
 @when(parsers.parse('I request the details of my order'))
-def get_order_details(auth_token, request):
+def get_order_details(user_obj, request):
     logger.info("Starting get order details test")
     config = get_config()
-    headers = {'Authorization': auth_token}
+    headers = get_auth_headers(user_obj["token"])
 
     response = requests.get(
         config["base_url"] + "order/get-orders-for-customer/67d8f80dc019fb1ad62b991d",

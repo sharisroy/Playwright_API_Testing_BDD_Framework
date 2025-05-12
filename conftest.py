@@ -1,3 +1,4 @@
+import datetime
 import json
 import logging
 import pdb
@@ -20,7 +21,7 @@ def api_context(playwright: Playwright):
 
 
 @pytest.fixture(scope="session")
-def auth_token(api_context: APIRequestContext):
+def user_obj(api_context: APIRequestContext):
     config = get_config()
     credentials = get_credentials()["user_credentials"]["valid_user"]
 
@@ -41,13 +42,16 @@ def auth_token(api_context: APIRequestContext):
     token = response.json().get("token")
     assert token, "Token not found in login response"
 
-    return token
+    # return token
+
+    response_obj = response.json()
+    return response_obj
 
 @pytest.fixture(scope="module")
-def latest_order_id(auth_token):
+def latest_order_id(user_obj):
     config = get_config()
-    headers = {'Authorization': auth_token}
-    order_response = requests.get(config["base_url"] + "order/get-orders-for-customer/67d8f80dc019fb1ad62b991d",
+    headers = {'Authorization': user_obj["token"]}
+    order_response = requests.get(config["base_url"] + "order/get-orders-for-customer/" + user_obj["userId"],
                                   headers=headers)
     assert order_response.json()['message'] == "Orders fetched for customer Successfully"
     latest_order_id = order_response.json()['data'][0]['_id']
@@ -64,6 +68,10 @@ def pytest_metadata(metadata):
     metadata["Tester"] = "Haris"
     metadata["Environment"] = "Staging"
 
+def pytest_configure(config):
+    now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    report_name = f"report_{now}.html"
+    config.option.htmlpath = f"reports/{report_name}"
 
 def pytest_html_results_summary(prefix, summary, postfix):
     # Add custom CSS styles to the HTML report

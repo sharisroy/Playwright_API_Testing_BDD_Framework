@@ -1,23 +1,32 @@
 import requests
+import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
 from utils.data_loader import get_config, get_order_data
-from utils.helper import get_logger
+from utils.helper import get_logger, get_auth_headers
 
 scenarios('../features/order.feature')
 
-order_response = []
 logger = get_logger()
 
+
+# 🔧 Fixture to hold per-scenario order context
+@pytest.fixture
+def order_context():
+    return {}
+
+
 @given("I am logged in with a valid user")
-def i_am_logged_in(auth_token):
-    assert auth_token is not None
+def i_am_logged_in(user_obj):
+    assert user_obj is not None
+
 
 @when(parsers.parse('I try to place an order using "{order_type}" data'))
-def place_order(order_type, auth_token, request):
+def place_order(order_type, user_obj, order_context):
     logger.info("Starting create order test")
+
     config = get_config()
     order_data = get_order_data()['order_list']
-    headers = {'Authorization': auth_token}
+    headers = get_auth_headers(user_obj["token"])
 
     order = order_data.get(order_type)
     if not order:
@@ -32,35 +41,28 @@ def place_order(order_type, auth_token, request):
         json=payload,
         headers=headers
     )
-    # logger.info(f"Headers: {headers}")
+
     logger.info(f"Payload: {payload}")
 
     res_json = response.json()
     order_id = res_json.get("orders", [None])[0]
 
-    order_response.append({
-        "order_type": order_type,
-        "response": response,
-        "order_id": order_id
-    })
-
+    # 💾 Store everything in context for use in later steps
+    order_context["order_type"] = order_type
+    order_context["response"] = response
+    order_context["order_id"] = order_id
 
 
 @then("the creation order should be successful")
-def verify_create_order_success():
-    latest = order_response[-1]
-    res = latest["response"]
+def verify_create_order_success(order_context):
+    res = order_context["response"]
     assert res.status_code == 201, f"Expected 201 but got {res.status_code}: {res.text}"
-    logger.info("Message: {}".format(res.json()["message"]))
+    logger.info("Message: {}".format(res.json().get("message", "No message in response")))
 
 
 @then("the order creation should fail")
-def verify_order_creation_failure():
-    latest = order_response[-1]
-    res = latest["response"]
+def verify_order_creation_failure(order_context):
+    res = order_context["response"]
     assert res.status_code in [400, 422], f"Expected failure status but got {res.status_code}: {res.text}"
     logger.error("---------- Create order failed ----------")
     logger.error("Message: %s", res.json().get("message", ""))
-
-
-

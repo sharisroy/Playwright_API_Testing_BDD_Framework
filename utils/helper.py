@@ -22,6 +22,12 @@ def login_and_get_token(user_email, user_password):
     else:
         return None
 
+def get_auth_headers(token: str):
+    return {
+        'Authorization': f"{token}",
+        'Content-Type': 'application/json'
+    }
+
 def get_logger(name=__name__):
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
