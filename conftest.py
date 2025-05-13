@@ -14,7 +14,7 @@ def pytest_addoption(parser):
     parser.addoption(
         "--env",
         action="store",
-        default="dev",  # Default to dev if no env is passed
+        default="stage",  # Default to dev if no env is passed
         help="Environment to run tests against: dev, qa, stage, prod"
     )
 

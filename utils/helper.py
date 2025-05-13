@@ -12,7 +12,6 @@ def login_and_get_token(user_email, user_password, config):
     }
 
     response = requests.post(url, json=payload, headers=headers)
-    print("Login Response:", response.status_code, response.text)
 
     if response.status_code == 200:
         return response.json().get("token")

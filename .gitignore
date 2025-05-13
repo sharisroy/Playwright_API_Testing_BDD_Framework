@@ -18,6 +18,10 @@ venv/
 ENV/
 env/
 
+# JetBrains IDE
+.idea/
+*.iml
+
 # VS Code settings
 .vscode/
 
