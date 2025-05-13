@@ -35,7 +35,7 @@ def place_order(order_type, user_obj, order_context, config):
     }
 
     response = requests.post(
-        config["base_url"] + "order/create-order",
+        config["base_url"] + config["order_endpoint"],
         json=payload,
         headers=headers
     )

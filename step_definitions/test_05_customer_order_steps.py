@@ -1,6 +1,5 @@
 import requests
 from pytest_bdd import scenarios, given, when, then, parsers
-from utils.data_loader import get_config, get_order_data
 from utils.helper import get_logger, get_auth_headers
 
 scenarios('../features/customer_order.feature')
@@ -17,7 +16,7 @@ def get_order_details(user_obj, config):
     logger.info("Starting get order details test")
 
     headers = get_auth_headers(user_obj["token"])
-    url = config["base_url"] + "order/get-orders-for-customer/67d8f80dc019fb1ad62b991d"
+    url = config["base_url"] + "order/get-orders-for-customer/" + user_obj["userId"]
 
     logger.info(f"GET {url}")
     response = requests.get(url, headers=headers)

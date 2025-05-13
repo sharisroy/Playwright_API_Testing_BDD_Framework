@@ -2,7 +2,9 @@
   "env": "dev",
   "shared": {
     "login_endpoint": "/auth/login",
-    "order_endpoint": "/orders/create",
+    "order_endpoint": "order/create-order",
+    "all_product_endpoint": "product/get-all-products",
+    "add_to_cart_endpoint": "user/add-to-cart",
     "headers": {
       "Content-Type": "application/json",
       "Accept": "application/json"

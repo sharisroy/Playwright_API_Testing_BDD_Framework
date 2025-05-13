@@ -85,6 +85,10 @@ def latest_order_id(user_obj, config):
 
     return order_response.json()['data'][0]['_id']
 
+@pytest.fixture(scope="session")
+def first_product():
+    return {}
+
 @pytest.hookimpl(tryfirst=True)
 def pytest_html_report_title(report):
     report.title = "Custom API Test Report"
